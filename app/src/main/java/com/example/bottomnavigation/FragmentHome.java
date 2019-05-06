@@ -20,7 +20,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -60,6 +64,7 @@ public class FragmentHome extends Fragment {
     private StoreAdapter mAdapter;
 //    private ViewFlipper viewFlipper;
     private ViewPager viewPager;
+    private SearchView searchView;
     private Slider slider;
     private float x1,x2;
     static final int MIN_DISTANCE = 150;
@@ -67,7 +72,20 @@ public class FragmentHome extends Fragment {
     Timer timer;
     final long DELAY_MS = 3000;//delay in milliseconds before task is to be executed
     final long PERIOD_MS = 5000;
+    GridView grid;
+    String[] web = {
+            "Google",
+            "Github",
+            "Instagram",
+            "Facebook"
+    } ;
+    int[] imageId = {
+            R.drawable.slide1,
+            R.drawable.slide2,
+            R.drawable.slide3,
+            R.drawable.slide4,
 
+    };
     public FragmentHome() {
         // Required empty public constructor
     }
@@ -87,19 +105,21 @@ public class FragmentHome extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
 
-        recyclerView = view.findViewById(R.id.recycler_view);
-        movieList = new ArrayList<>();
-        mAdapter = new StoreAdapter(getActivity(), movieList);
-
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(8), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
-        recyclerView.setNestedScrollingEnabled(false);
+//        recyclerView = view.findViewById(R.id.recycler_view);
+//        movieList = new ArrayList<>();
+//        mAdapter = new StoreAdapter(getActivity(), movieList);
+//
+//
+//        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
+//        recyclerView.setLayoutManager(mLayoutManager);
+//        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(8), true));
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        recyclerView.setAdapter(mAdapter);
+//        recyclerView.setNestedScrollingEnabled(false);
 
         viewPager = view.findViewById(R.id.viewpager);
 
@@ -118,6 +138,21 @@ public class FragmentHome extends Fragment {
             }
         };
 
+        CustomGrid adapter = new CustomGrid(getActivity(), web, imageId);
+        grid = view.findViewById(R.id.grid);
+        grid.setAdapter(adapter);
+
+        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Toast.makeText(getActivity(), "You Clicked at " +web[+ position], Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
         timer = new Timer(); // This will create a new Thread
         timer.schedule(new TimerTask() { // task to be scheduled
             @Override
@@ -130,7 +165,7 @@ public class FragmentHome extends Fragment {
         viewPager.setAdapter(slider);
 
 
-        fetchStoreItems();
+//        fetchStoreItems();
         return view;
     }
 
