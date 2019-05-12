@@ -7,101 +7,130 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nes_scroll"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alwaysDrawnWithCache="false"
-        tools:context=".FragmentHome">
+        android:layout_height="match_parent">
 
-        <!-- TODO: Update blank fragment layout -->
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nes_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:alwaysDrawnWithCache="false"
+            tools:context=".FragmentHome">
 
-
-            <RelativeLayout
+            <!-- TODO: Update blank fragment layout -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="top"
-                android:layout_marginTop="0dp"
-                android:alwaysDrawnWithCache="false">
+                android:orientation="vertical">
 
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/viewpager"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="200dp">
+                    android:layout_height="match_parent"
+                    android:layout_gravity="top"
+                    android:layout_marginTop="0dp"
+                    android:alwaysDrawnWithCache="false">
 
-                </android.support.v4.view.ViewPager>
 
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tabDots"
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/viewpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp">
+
+                    </android.support.v4.view.ViewPager>
+
+                    <android.support.design.widget.TabLayout
+                        android:id="@+id/tabDots"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        app:tabBackground="@drawable/tab_selector"
+                        app:tabGravity="center"
+                        app:tabIndicatorHeight="0dp" />
+
+                </RelativeLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:background="#FFFFFF">
+
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:columnCount="6"
+                        android:orientation="horizontal"
+                        android:rowCount="2">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/listCategories"
+                            android:layout_width="450dp"
+                            android:layout_height="wrap_content"
+                            android:clipToPadding="false"
+                            >
+                        </android.support.v7.widget.RecyclerView>
+
+
+                    </GridLayout>
+                </HorizontalScrollView>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    app:tabBackground="@drawable/tab_selector"
-                    app:tabGravity="center"
-                    app:tabIndicatorHeight="0dp" />
+                    android:clipToPadding="false">
 
-            </RelativeLayout>
+                </android.support.v7.widget.RecyclerView>
+                <GridView
+                    android:id="@+id/grid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    android:columnWidth="50dp"
+                    android:columnCount="5"
+                    android:gravity="center"
+                    android:numColumns="4"
+                    android:orientation="horizontal"
+                    android:rowCount="6"
+                    android:scrollbars="horizontal">
 
-            <GridView
-                android:id="@+id/grid"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:columnWidth="50dp"
-                android:gravity="center"
-                android:numColumns="4"
-                android:stretchMode="columnWidth">
+                </GridView>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingTop="10dp"
+                    android:text="New Release Films"
+                    android:textColor="#111"
+                    android:textSize="16dp" />
 
-            </GridView>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingTop="10dp"
-                android:text="New Release Films"
-                android:textColor="#111"
-                android:textSize="16dp" />
-            <!--<android.support.v7.widget.RecyclerView-->
-                <!--android:id="@+id/recycler_view"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:clipToPadding="false"-->
-                <!--android:scrollbars="vertical" >-->
+            </LinearLayout>
 
-            <!--</android.support.v7.widget.RecyclerView>-->
-        </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
 
-    </android.support.v4.widget.NestedScrollView>
-
-    <android.support.design.widget.BottomNavigationView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:alwaysDrawnWithCache="true"
-        android:background="#00FCFCFC"
-        android:keepScreenOn="true"
-        android:visibility="visible"
-        app:itemTextColor="#F44336">
-
-        <SearchView
-
+        <android.support.design.widget.BottomNavigationView
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="100dp"
-            android:layout_marginBottom="8dp"
-            android:background="#ECECE5" />
-    </android.support.design.widget.BottomNavigationView>
-</FrameLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:alwaysDrawnWithCache="true"
+            android:background="#00FCFCFC"
+            android:keepScreenOn="true"
+            android:visibility="visible"
+            app:itemTextColor="#F44336">
+
+            <SearchView
+
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="100dp"
+                android:layout_marginBottom="8dp"
+                android:background="#ECECE5" />
+        </android.support.design.widget.BottomNavigationView>
+    </FrameLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

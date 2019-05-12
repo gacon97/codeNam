@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +61,7 @@ public class FragmentHome extends Fragment {
     private static final String URL = "https://api.androidhive.info/json/movies_2017.json";
 
     private RecyclerView recyclerView;
+    private RecyclerView viewListCategories;
     private List<Movie> movieList;
     private StoreAdapter mAdapter;
 //    private ViewFlipper viewFlipper;
@@ -73,21 +75,10 @@ public class FragmentHome extends Fragment {
     final long DELAY_MS = 3000;//delay in milliseconds before task is to be executed
     final long PERIOD_MS = 5000;
     GridView grid;
-    String[] web = {
-            "Google",
-            "Github",
-            "Instagram",
-            "Facebook"
-    } ;
-    int[] imageId = {
-            R.drawable.slide1,
-            R.drawable.slide2,
-            R.drawable.slide3,
-            R.drawable.slide4,
+    ArrayList<Category> listCategories;
+    CategoryAdapter adapter;
 
-    };
     public FragmentHome() {
-        // Required empty public constructor
     }
 
     public static FragmentHome newInstance(String param1, String param2) {
@@ -105,21 +96,18 @@ public class FragmentHome extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
 
-//        recyclerView = view.findViewById(R.id.recycler_view);
-//        movieList = new ArrayList<>();
-//        mAdapter = new StoreAdapter(getActivity(), movieList);
-//
-//
-//        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
-//        recyclerView.setLayoutManager(mLayoutManager);
-//        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(8), true));
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
-//        recyclerView.setAdapter(mAdapter);
-//        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView = view.findViewById(R.id.recycler_view);
+        movieList = new ArrayList<>();
+        mAdapter = new StoreAdapter(getActivity(), movieList);
+
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(8), true));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setNestedScrollingEnabled(false);
 
         viewPager = view.findViewById(R.id.viewpager);
 
@@ -138,20 +126,27 @@ public class FragmentHome extends Fragment {
             }
         };
 
-        CustomGrid adapter = new CustomGrid(getActivity(), web, imageId);
-        grid = view.findViewById(R.id.grid);
-        grid.setAdapter(adapter);
+        listCategories = new ArrayList<>();
+        listCategories.add(new Category("Đường phố", R.drawable.cate_duong_pho));
+        listCategories.add(new Category("Sông", R.drawable.cate_song));
+        listCategories.add(new Category("Chùa", R.drawable.cate_chua));
+        listCategories.add(new Category("Núi", R.drawable.cate_nui));
+        listCategories.add(new Category("Biển", R.drawable.cate_bien));
+        listCategories.add(new Category("Hồ", R.drawable.cate_ho));
+        listCategories.add(new Category("Hang động", R.drawable.cate_hang_dong));
+        listCategories.add(new Category("Kiến trúc", R.drawable.cate_kien_truc));
+        listCategories.add(new Category("Sa mạc", R.drawable.cate_sa_mac));
+        listCategories.add(new Category("Khách sạn", R.drawable.cate_khach_san));
 
-        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        adapter = new CategoryAdapter(getActivity(), listCategories);
+        viewListCategories = view.findViewById(R.id.listCategories);
+        RecyclerView.LayoutManager layoutCategories = new GridLayoutManager(getActivity(), 5);
+        viewListCategories.setLayoutManager(layoutCategories);
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Toast.makeText(getActivity(), "You Clicked at " +web[+ position], Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
+        MyAdapter myAdapter = new MyAdapter(getActivity(), listCategories);
+        viewListCategories.setAdapter(myAdapter);
+        viewListCategories.setItemAnimator(new DefaultItemAnimator());
+        viewListCategories.setNestedScrollingEnabled(false);
 
         timer = new Timer(); // This will create a new Thread
         timer.schedule(new TimerTask() { // task to be scheduled
@@ -164,8 +159,7 @@ public class FragmentHome extends Fragment {
         slider = new Slider(getActivity());
         viewPager.setAdapter(slider);
 
-
-//        fetchStoreItems();
+        fetchStoreItems();
         return view;
     }
 
@@ -243,64 +237,4 @@ public class FragmentHome extends Fragment {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
-    class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.MyViewHolder> {
-        private Context context;
-        private List<Movie> movieList;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView name, price;
-            public ImageView thumbnail;
-
-            public MyViewHolder(View view) {
-                super(view);   //gọi đến contructor của viewHolder truyền vào view
-                name = view.findViewById(R.id.title);
-                price = view.findViewById(R.id.price);
-                thumbnail = view.findViewById(R.id.thumbnail);
-            }
-        }
-
-
-        public StoreAdapter(Context context, List<Movie> movieList) {
-            this.context = context;
-            this.movieList = movieList;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_row, parent, false);
-
-            return new MyViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(MyViewHolder holder, final int position) {
-            final Movie movie = movieList.get(position);
-            holder.name.setText(movie.getTitle());
-            holder.price.setText(movie.getPrice());
-
-            Glide.with(context)
-                    .load(movie.getImage())
-                    .into(holder.thumbnail);
-        }
-
-        @Override
-        public int getItemCount() {
-            return movieList.size();
-        }
-    }
-//    public void imageFlipper(int image)
-//    {
-//        ImageView imageView = new ImageView(getActivity());
-//
-//        imageView.setBackgroundResource(image);
-//        viewPager.addView(imageView);
-//        viewPager.
-//        viewPager.setAutoStart(true);
-//        viewPager.setFlipInterval(10000);
-//
-//        viewPager.setInAnimation(getActivity(), android.R.anim.fade_in);
-//        viewPager.setOutAnimation(getActivity(), android.R.anim.fade_out);
-//
-//    }
 }
